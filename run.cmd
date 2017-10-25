@@ -1,1 +1,0 @@
-python.exe browser_install.py -vvvv --all
