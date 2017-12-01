@@ -23,7 +23,8 @@ import requests
 
 class Install(object):
     """Main installer logic"""
-    def __init__(self):
+    def __init__(self, options):
+        self.options = options
         if platform.machine().endswith('64'):
             firefox_os = 'win64'
             self.chrome_path = {
@@ -159,7 +160,7 @@ class Install(object):
                 pass
         try:
             logging.debug('Downloading %s to %s', url, dest)
-            response = requests.get(url, headers=headers, stream=True)
+            response = requests.get(url, headers=headers, stream=True, timeout=300)
             if response.status_code == 200:
                 modified = response.headers['Last-Modified']
                 with open(dest, 'wb') as f_out:
@@ -196,6 +197,34 @@ class Install(object):
         ret = win32process.GetExitCodeProcess(process_info['hProcess'])
         win32api.CloseHandle(process_info['hProcess'])
         return ret
+
+    def install_thread(self):
+        """Do the actual install"""
+        if self.options.chrome:
+            if self.options.stable:
+                self.chrome('Stable')
+            if self.options.beta:
+                self.chrome('Beta')
+            if self.options.dev:
+                self.chrome('Dev')
+        if self.options.firefox:
+            if self.options.stable:
+                self.firefox('Mozilla Firefox')
+                self.firefox('Mozilla Firefox ESR')
+                self.firefox('Mozilla Firefox Dev')
+            if self.options.beta:
+                self.firefox('Mozilla Firefox Beta')
+            if self.options.dev:
+                self.firefox('Nightly')
+        self.save_status()
+
+    def install(self):
+        """Run the install (in a background thread) for up to an hour"""
+        import threading
+        thread = threading.Thread(target=self.install_thread)
+        thread.daemon = True
+        thread.start()
+        thread.join(3600)
 
 ##########################################################################
 #   Main Entry Point
@@ -240,24 +269,8 @@ def main():
         options.beta = True
         options.dev = True
 
-    install = Install()
-    if options.chrome:
-        if options.stable:
-            install.chrome('Stable')
-        if options.beta:
-            install.chrome('Beta')
-        if options.dev:
-            install.chrome('Dev')
-    if options.firefox:
-        if options.stable:
-            install.firefox('Mozilla Firefox')
-            install.firefox('Mozilla Firefox ESR')
-            install.firefox('Mozilla Firefox Dev')
-        if options.beta:
-            install.firefox('Mozilla Firefox Beta')
-        if options.dev:
-            install.firefox('Nightly')
-    install.save_status()
+    install = Install(options)
+    install.install()
 
     end = time.time()
     elapsed = end - start
