@@ -210,10 +210,10 @@ class Install(object):
         if self.options.firefox:
             if self.options.stable:
                 self.firefox('Mozilla Firefox')
-                self.firefox('Mozilla Firefox ESR')
-                self.firefox('Mozilla Firefox Dev')
             if self.options.beta:
                 self.firefox('Mozilla Firefox Beta')
+                self.firefox('Mozilla Firefox ESR')
+                self.firefox('Mozilla Firefox Dev')
             if self.options.dev:
                 self.firefox('Nightly')
         self.save_status()
@@ -242,8 +242,9 @@ def main():
     parser.add_argument('-c', '--chrome', action='store_true', default=False, help="Chrome.")
     parser.add_argument('-f', '--firefox', action='store_true', default=False, help="Firefox.")
     parser.add_argument('-s', '--stable', action='store_true', default=False,
-                        help="Stable releases (includes ESR and dev edition for Firefox).")
-    parser.add_argument('-b', '--beta', action='store_true', default=False, help="Beta releases.")
+                        help="Stable releases.")
+    parser.add_argument('-b', '--beta', action='store_true', default=False,
+                        help="Beta releases (includes ESR and dev edition for Firefox).")
     parser.add_argument('-d', '--dev', action='store_true', default=False,
                         help="Dev releases (Nightly for Firefox, Dev channel for Chrome).")
     options, _ = parser.parse_known_args()
