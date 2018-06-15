@@ -26,7 +26,8 @@ class Install(object):
     def __init__(self, options):
         self.options = options
         if platform.machine().endswith('64'):
-            firefox_os = 'win64'
+            # firefox_os = 'win64'
+            firefox_os = 'win'
             self.chrome_path = {
                 'Stable': 'https://dl.google.com/tag/s/'\
                           'appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26'\
