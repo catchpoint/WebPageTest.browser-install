@@ -84,6 +84,14 @@ class Install(object):
             'Mozilla Firefox Dev': firefox_url.format('firefox-devedition-latest'),
             'Nightly': firefox_url.format('firefox-nightly-latest')
         }
+        self.edge_path = {
+            'Dev': 'https://c2rsetup.officeapps.live.com/c2r/downloadEdge.aspx?'\
+                   'ProductreleaseID=Edge&platform=Default&version=Edge&Channel=Dev'\
+                   '&language=en-us&Consent=1',
+            'Canary': 'https://c2rsetup.officeapps.live.com/c2r/downloadEdge.aspx?'\
+                      'ProductreleaseID=Edge&platform=Default&version=Edge&Channel=Canary'\
+                      '&language=en-us&Consent=1',
+        }
         self.dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'tmp')
         if not os.path.isdir(self.dir):
             os.makedirs(self.dir)
@@ -106,6 +114,25 @@ class Install(object):
         if channel in self.chrome_path:
             url = self.chrome_path[channel]
             name = 'Chrome ' + channel
+            print "Checking {0}...".format(name)
+            last_modified = None
+            if name in self.status:
+                last_modified = self.status[name]
+            exe, modified = self.download_installer(url, last_modified)
+            if exe is not None and os.path.isfile(exe):
+                ret = self.run_elevated(exe, '/silent /install')
+                if ret == 0 and modified is not None:
+                    self.status[name] = modified
+                try:
+                    os.remove(exe)
+                except Exception:
+                    pass
+
+    def edge(self, channel):
+        """Install the given Chrome channel"""
+        if channel in self.edge_path:
+            url = self.edge_path[channel]
+            name = 'Microsoft Edge ' + channel
             print "Checking {0}...".format(name)
             last_modified = None
             if name in self.status:
@@ -151,7 +178,9 @@ class Install(object):
         """Download the given installer if it is newer"""
         exe = None
         modified = None
-        headers = {'If-Modified-Since': last_modified}
+        headers = None
+        if last_modified is not None:
+            headers = {'If-Modified-Since': last_modified}
         dest = os.path.join(self.dir, 'browser_install.exe')
         if os.path.isfile(dest):
             try:
@@ -162,7 +191,10 @@ class Install(object):
             logging.debug('Downloading %s to %s', url, dest)
             response = requests.get(url, headers=headers, stream=True, timeout=300)
             if response.status_code == 200:
-                modified = response.headers['Last-Modified']
+                if 'Last-Modified' in response.headers:
+                    modified = response.headers['Last-Modified']
+                elif 'Date' in response.headers:
+                    modified = response.headers['Date']
                 with open(dest, 'wb') as f_out:
                     for chunk in response.iter_content(chunk_size=4096):
                         f_out.write(chunk)
@@ -216,6 +248,10 @@ class Install(object):
                 self.firefox('Mozilla Firefox Dev')
             if self.options.dev:
                 self.firefox('Nightly')
+        if self.options.edge:
+            if self.options.dev:
+                self.edge('Dev')
+                self.edge('Canary')
         self.save_status()
 
     def install(self):
@@ -241,6 +277,7 @@ def main():
                         help="All supported browsers.")
     parser.add_argument('-c', '--chrome', action='store_true', default=False, help="Chrome.")
     parser.add_argument('-f', '--firefox', action='store_true', default=False, help="Firefox.")
+    parser.add_argument('-e', '--edge', action='store_true', default=False, help="Microsoft Edge (Chromium).")
     parser.add_argument('-s', '--stable', action='store_true', default=False,
                         help="Stable releases.")
     parser.add_argument('-b', '--beta', action='store_true', default=False,
@@ -266,6 +303,7 @@ def main():
     if options.all:
         options.chrome = True
         options.firefox = True
+        options.edge = True
         options.stable = True
         options.beta = True
         options.dev = True
