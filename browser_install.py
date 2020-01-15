@@ -85,6 +85,9 @@ class Install(object):
             'Nightly': firefox_url.format('firefox-nightly-latest')
         }
         self.edge_path = {
+            'Stable': 'https://c2rsetup.officeapps.live.com/c2r/downloadEdge.aspx?'\
+                      'ProductreleaseID=Edge&platform=Default&version=Edge'\
+                      '&Channel=Stable&language=en-us&Consent=1',
             'Dev': 'https://c2rsetup.officeapps.live.com/c2r/downloadEdge.aspx?'\
                    'ProductreleaseID=Edge&platform=Default&version=Edge&Channel=Dev'\
                    '&language=en-us&Consent=1',
@@ -249,6 +252,8 @@ class Install(object):
             if self.options.dev:
                 self.firefox('Nightly')
         if self.options.edge:
+            if self.options.stable:
+                self.edge('Stable')
             if self.options.dev:
                 self.edge('Dev')
                 self.edge('Canary')
