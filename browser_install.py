@@ -50,7 +50,14 @@ class Install(object):
                        'installdataindex%3Dempty'\
                        '/chrome/install/dev/ChromeDevStandaloneSetup64.exe'
             }
+            self.brave_path = {
+                'Stable': 'https://laptop-updates.brave.com/latest/winx64',
+                'Beta': 'https://brave-browser-downloads.s3.brave.com/latest/BraveBrowserBetaSetup.exe',
+                'Dev': 'https://brave-browser-downloads.s3.brave.com/latest/BraveBrowserDevSetup.exe',
+                'Nightly': 'https://laptop-updates.brave.com/latest/winx64/nightly'
+            }
         else:
+            firefox_os = 'win'
             self.chrome_path = {
                 'Stable': 'https://dl.google.com/tag/s/'\
                           'appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26'\
@@ -74,7 +81,12 @@ class Install(object):
                        'installdataindex%3Dempty'\
                        '/chrome/install/dev/ChromeDevStandaloneSetup.exe'
             }
-            firefox_os = 'win'
+            self.brave_path = {
+                'Stable': 'https://laptop-updates.brave.com/latest/winia32',
+                'Beta': 'https://brave-browser-downloads.s3.brave.com/latest/BraveBrowserBetaSetup32.exe',
+                'Dev': 'https://brave-browser-downloads.s3.brave.com/latest/BraveBrowserDevSetup32.exe',
+                'Nightly': 'https://laptop-updates.brave.com/latest/winia32/nightly'
+            }
 
         firefox_url = 'http://download.mozilla.org/?product={0}&lang=en-US&os=' + firefox_os
         self.firefox_path = {
@@ -117,6 +129,25 @@ class Install(object):
         if channel in self.chrome_path:
             url = self.chrome_path[channel]
             name = 'Chrome ' + channel
+            print "Checking {0}...".format(name)
+            last_modified = None
+            if name in self.status:
+                last_modified = self.status[name]
+            exe, modified = self.download_installer(url, last_modified)
+            if exe is not None and os.path.isfile(exe):
+                ret = self.run_elevated(exe, '/silent /install')
+                if ret == 0 and modified is not None:
+                    self.status[name] = modified
+                try:
+                    os.remove(exe)
+                except Exception:
+                    pass
+
+    def brave(self, channel):
+        """Install the given Brave channel"""
+        if channel in self.brave_path:
+            url = self.brave_path[channel]
+            name = 'Brave ' + channel
             print "Checking {0}...".format(name)
             last_modified = None
             if name in self.status:
@@ -257,6 +288,14 @@ class Install(object):
             if self.options.dev:
                 self.edge('Dev')
                 self.edge('Canary')
+        if self.options.brave:
+            if self.options.stable:
+                self.brave('Stable')
+            if self.options.beta:
+                self.brave('Beta')
+            if self.options.dev:
+                self.brave('Dev')
+                self.brave('Nightly')
         self.save_status()
 
     def install(self):
@@ -283,6 +322,7 @@ def main():
     parser.add_argument('-c', '--chrome', action='store_true', default=False, help="Chrome.")
     parser.add_argument('-f', '--firefox', action='store_true', default=False, help="Firefox.")
     parser.add_argument('-e', '--edge', action='store_true', default=False, help="Microsoft Edge (Chromium).")
+    parser.add_argument('-r', '--brave', action='store_true', default=False, help="Brave.")
     parser.add_argument('-s', '--stable', action='store_true', default=False,
                         help="Stable releases.")
     parser.add_argument('-b', '--beta', action='store_true', default=False,
@@ -309,6 +349,7 @@ def main():
         options.chrome = True
         options.firefox = True
         options.edge = True
+        options.brave = True
         options.stable = True
         options.beta = True
         options.dev = True
