@@ -129,7 +129,7 @@ class Install(object):
         if channel in self.chrome_path:
             url = self.chrome_path[channel]
             name = 'Chrome ' + channel
-            print "Checking {0}...".format(name)
+            print("Checking {0}...".format(name))
             last_modified = None
             if name in self.status:
                 last_modified = self.status[name]
@@ -148,7 +148,7 @@ class Install(object):
         if channel in self.brave_path:
             url = self.brave_path[channel]
             name = 'Brave ' + channel
-            print "Checking {0}...".format(name)
+            print("Checking {0}...".format(name))
             last_modified = None
             if name in self.status:
                 last_modified = self.status[name]
@@ -167,7 +167,7 @@ class Install(object):
         if channel in self.edge_path:
             url = self.edge_path[channel]
             name = 'Microsoft Edge ' + channel
-            print "Checking {0}...".format(name)
+            print("Checking {0}...".format(name))
             last_modified = None
             if name in self.status:
                 last_modified = self.status[name]
@@ -186,7 +186,7 @@ class Install(object):
         if channel in self.firefox_path:
             url = self.firefox_path[channel]
             name = channel
-            print "Checking {0}...".format(name)
+            print("Checking {0}...".format(name))
             last_modified = None
             if name in self.status:
                 last_modified = self.status[name]
@@ -195,9 +195,9 @@ class Install(object):
                 # Create an ini file for the installer to use
                 ini_file = os.path.join(self.dir, 'firefox.ini')
                 with open(ini_file, 'wb') as ini:
-                    ini.write("[Install]\n")
-                    ini.write("InstallDirectoryName={0}\n".format(channel))
-                    ini.write("MaintenanceService=false\n")
+                    ini.write(bytes('[Install]\n', 'utf-8'))
+                    ini.write(bytes('InstallDirectoryName={0}\n'.format(channel), 'utf-8'))
+                    ini.write(bytes('MaintenanceService=false\n', 'utf-8'))
                 ret = self.run_elevated(exe, '/INI="{0}"'.format(ini_file))
                 if ret == 0 and modified is not None:
                     self.status[name] = modified
