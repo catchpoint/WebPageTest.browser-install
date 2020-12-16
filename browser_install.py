@@ -113,7 +113,7 @@ class Install(object):
         self.status_file = os.path.join(self.dir, 'browser_install.json')
         self.status = None
         if os.path.isfile(self.status_file):
-            with open(self.status_file, 'rb') as f_in:
+            with open(self.status_file, 'r') as f_in:
                 self.status = json.load(f_in)
         if self.status is None:
             self.status = {}
@@ -121,7 +121,7 @@ class Install(object):
     def save_status(self):
         """Save the installed state of the various browsers"""
         if self.status:
-            with open(self.status_file, 'wb') as f_out:
+            with open(self.status_file, 'w') as f_out:
                 json.dump(self.status, f_out, indent=4)
 
     def chrome(self, channel):
