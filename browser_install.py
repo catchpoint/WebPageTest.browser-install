@@ -194,10 +194,10 @@ class Install(object):
             if exe is not None and os.path.isfile(exe):
                 # Create an ini file for the installer to use
                 ini_file = os.path.join(self.dir, 'firefox.ini')
-                with open(ini_file, 'wb') as ini:
-                    ini.write(bytes('[Install]\n', 'utf-8'))
-                    ini.write(bytes('InstallDirectoryName={0}\n'.format(channel), 'utf-8'))
-                    ini.write(bytes('MaintenanceService=false\n', 'utf-8'))
+                with open(ini_file, 'w') as ini:
+                    ini.write('[Install]\n')
+                    ini.write('InstallDirectoryName={0}\n'.format(channel))
+                    ini.write('MaintenanceService=false\n')
                 ret = self.run_elevated(exe, '/INI="{0}"'.format(ini_file))
                 if ret == 0 and modified is not None:
                     self.status[name] = modified
