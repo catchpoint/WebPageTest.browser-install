@@ -113,7 +113,7 @@ class Install(object):
         self.status_file = os.path.join(self.dir, 'browser_install.json')
         self.status = None
         if os.path.isfile(self.status_file):
-            with open(self.status_file, 'rb') as f_in:
+            with open(self.status_file, 'r') as f_in:
                 self.status = json.load(f_in)
         if self.status is None:
             self.status = {}
@@ -121,7 +121,7 @@ class Install(object):
     def save_status(self):
         """Save the installed state of the various browsers"""
         if self.status:
-            with open(self.status_file, 'wb') as f_out:
+            with open(self.status_file, 'w') as f_out:
                 json.dump(self.status, f_out, indent=4)
 
     def chrome(self, channel):
@@ -129,7 +129,7 @@ class Install(object):
         if channel in self.chrome_path:
             url = self.chrome_path[channel]
             name = 'Chrome ' + channel
-            print "Checking {0}...".format(name)
+            print("Checking {0}...".format(name))
             last_modified = None
             if name in self.status:
                 last_modified = self.status[name]
@@ -148,7 +148,7 @@ class Install(object):
         if channel in self.brave_path:
             url = self.brave_path[channel]
             name = 'Brave ' + channel
-            print "Checking {0}...".format(name)
+            print("Checking {0}...".format(name))
             last_modified = None
             if name in self.status:
                 last_modified = self.status[name]
@@ -167,7 +167,7 @@ class Install(object):
         if channel in self.edge_path:
             url = self.edge_path[channel]
             name = 'Microsoft Edge ' + channel
-            print "Checking {0}...".format(name)
+            print("Checking {0}...".format(name))
             last_modified = None
             if name in self.status:
                 last_modified = self.status[name]
@@ -186,7 +186,7 @@ class Install(object):
         if channel in self.firefox_path:
             url = self.firefox_path[channel]
             name = channel
-            print "Checking {0}...".format(name)
+            print("Checking {0}...".format(name))
             last_modified = None
             if name in self.status:
                 last_modified = self.status[name]
@@ -194,10 +194,10 @@ class Install(object):
             if exe is not None and os.path.isfile(exe):
                 # Create an ini file for the installer to use
                 ini_file = os.path.join(self.dir, 'firefox.ini')
-                with open(ini_file, 'wb') as ini:
-                    ini.write("[Install]\n")
-                    ini.write("InstallDirectoryName={0}\n".format(channel))
-                    ini.write("MaintenanceService=false\n")
+                with open(ini_file, 'w') as ini:
+                    ini.write('[Install]\n')
+                    ini.write('InstallDirectoryName={0}\n'.format(channel))
+                    ini.write('MaintenanceService=false\n')
                 ret = self.run_elevated(exe, '/INI="{0}"'.format(ini_file))
                 if ret == 0 and modified is not None:
                     self.status[name] = modified
