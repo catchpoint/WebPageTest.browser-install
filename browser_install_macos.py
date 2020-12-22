@@ -25,8 +25,9 @@ class Install(object):
     """Main installer logic"""
     def __init__(self):
         cpu = subprocess.check_output(['uname', '-m'], universal_newlines=True)
-        logging.debug("CPU Platform: %s", cpu)
-        if cpu.startswith('arm'):
+        rosetta = subprocess.check_output(['sysctl', '-in', 'sysctl.proc_translated'], universal_newlines=True)
+        logging.debug("CPU Platform: %s, Translated: %s", cpu, rosetta)
+        if cpu.startswith('arm') or int(rosetta) == 1:
             self.chrome_path = {
                 'Stable': 'https://dl.google.com/chrome/mac/universal/stable/GGRO/googlechrome.dmg',
                 'Beta': 'https://dl.google.com/chrome/mac/universal/beta/googlechromebeta.dmg',
