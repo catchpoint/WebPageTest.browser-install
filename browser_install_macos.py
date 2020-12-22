@@ -25,6 +25,7 @@ class Install(object):
     """Main installer logic"""
     def __init__(self):
         cpu = subprocess.check_output(['uname', '-m'], universal_newlines=True)
+        logging.debug("CPU Platform: %s", cpu)
         if cpu.startswith('arm'):
             self.chrome_path = {
                 'Stable': 'https://dl.google.com/chrome/mac/universal/stable/GGRO/googlechrome.dmg',
