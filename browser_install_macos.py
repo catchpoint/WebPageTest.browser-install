@@ -41,11 +41,6 @@ class Install(object):
                 'Dev': 'https://dl.google.com/chrome/mac/dev/googlechromedev.dmg',
                 'Canary': 'https://dl.google.com/chrome/mac/canary/googlechromecanary.dmg'
             }
-        self.brave_path = {
-            'Stable': 'https://referrals.brave.com/latest/Brave-Browser.pkg',
-            'Beta': 'https://referrals.brave.com/latest/Brave-Browser-Beta.pkg',
-            'Nightly': 'https://referrals.brave.com/latest/Brave-Browser-Nightly.pkg'
-        }
         self.firefox_path = {
             'Mozilla Firefox': 'https://download.mozilla.org/?product=firefox-latest-ssl&os=osx&lang=en-US',
         }
@@ -82,28 +77,6 @@ class Install(object):
                     self.status[name] = modified
                 try:
                     os.remove(dmg)
-                except Exception:
-                    pass
-
-    def brave(self, channel):
-        """Install the given Brave channel"""
-        if channel in self.brave_path:
-            url = self.brave_path[channel]
-            name = 'Brave ' + channel
-            print("Checking {0}...".format(name))
-            last_modified = None
-            if name in self.status:
-                last_modified = self.status[name]
-            pkg, modified = self.download_installer(url, last_modified, 'pkg')
-            if pkg is not None and os.path.isfile(pkg):
-                try:
-                    subprocess.check_call(['sudo', 'installer', '-pkg', pkg, '-target', '/'])
-                    if modified is not None:
-                        self.status[name] = modified
-                except Exception:
-                    pass
-                try:
-                    os.remove(pkg)
                 except Exception:
                     pass
 
@@ -184,8 +157,6 @@ class Install(object):
             self.chrome(channel)
         for channel in self.firefox_path:
             self.firefox(channel)
-        for channel in self.brave_path:
-            self.brave(channel)
         self.save_status()
 
     def install(self):
