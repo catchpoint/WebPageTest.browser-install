@@ -41,13 +41,19 @@ class Install(object):
                 'Dev': 'https://dl.google.com/chrome/mac/dev/googlechromedev.dmg',
                 'Canary': 'https://dl.google.com/chrome/mac/canary/googlechromecanary.dmg'
             }
+        self.chrome_apps = {
+            'Stable': 'Google Chrome.app',
+            'Beta': 'Google Chrome Beta.app',
+            'Dev': 'Google Chrome Dev.app',
+            'Canary': 'Google Chrome Canary.app'
+        }
         self.firefox_path = {
             'Mozilla Firefox': 'https://download.mozilla.org/?product=firefox-latest-ssl&os=osx&lang=en-US',
         }
         self.dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'tmp')
         if not os.path.isdir(self.dir):
             os.makedirs(self.dir)
-        self.status_file = os.path.join(self.dir, 'browser_install.json')
+        self.status_file = os.path.join(self.dir, 'wpt_browser_install.json')
         self.status = None
         if os.path.isfile(self.status_file):
             with open(self.status_file, 'r') as f_in:
@@ -72,6 +78,11 @@ class Install(object):
                 last_modified = self.status[name]
             dmg, modified = self.download_installer(url, last_modified, 'dmg')
             if dmg is not None and os.path.isfile(dmg):
+                # Delete the current install
+                if channel in self.chrome_apps:
+                    app_path = os.path.join('/Applications', self.chrome_apps[channel])
+                    subprocess.call(['sudo', 'rm', '-rf', app_path])
+                # Install the new build
                 ret = self.install_dmg(dmg, 'Google Chrome')
                 if ret == 0 and modified is not None:
                     self.status[name] = modified
@@ -175,11 +186,8 @@ def main():
     # Set up logging
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s.%(msecs)03d - %(message)s", datefmt="%H:%M:%S")
 
-    start = time.time()
-    install = Install()
-    install.install()
-
     # Clean up old Chrome Downloads
+    logging.debug('Cleaning up Chrome cached downloads...')
     cache_dir = os.path.expanduser('~/Library/Caches/com.google.SoftwareUpdate/Downloads')
     if os.path.isdir(cache_dir):
         for filename in os.listdir(cache_dir):
@@ -189,6 +197,10 @@ def main():
                     os.unlink(file_path)
             except Exception:
                 pass
+
+    start = time.time()
+    install = Install()
+    install.install()
 
     end = time.time()
     elapsed = end - start
