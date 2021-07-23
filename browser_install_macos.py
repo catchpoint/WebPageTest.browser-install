@@ -179,6 +179,17 @@ def main():
     install = Install()
     install.install()
 
+    # Clean up old Chrome Downloads
+    cache_dir = os.path.expanduser('~/Library/Caches/com.google.SoftwareUpdate/Downloads')
+    if os.path.isdir(cache_dir):
+        for filename in os.listdir(cache_dir):
+            try:
+                file_path = os.path.join(cache_dir, filename)
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception:
+                pass
+
     end = time.time()
     elapsed = end - start
     logging.debug("Browser install done, Elapsed Time: %0.4f", elapsed)
