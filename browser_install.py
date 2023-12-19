@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+/usr/bin/env python
 """
 Copyright 2016 Google Inc. All Rights Reserved.
 
@@ -16,7 +16,7 @@ limitations under the License.
 """
 import json
 import logging
-import os
+
 import platform
 import time
 import requests
@@ -26,7 +26,7 @@ class Install(object):
     def __init__(self, options):
         self.options = options
         if platform.machine().endswith('64'):
-            firefox_os = 'win64'
+            chrome = 'win64'
             self.chrome_path = {
                 'Stable': 'https://dl.google.com/tag/s/'\
                           'appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26'\
@@ -46,18 +46,16 @@ class Install(object):
                        'appguid%3D%7B401C381F-E0DE-4B85-8BD8-3F3F14FBDA57%7D%26'\
                        'iid%3D%7B3C078BAD-5ACB-D945-6C84-7F778A6383F1%7D%26lang%3Den%26'\
                        'browser%3D4%26usagestats%3D0%26appname%3DGoogle%2520Chrome%2520Dev%26'\
-                       'needsadmin%3Dtrue%26ap%3D-arch_x64-statsdef_1%26'\
+                       'administrator/Owner/Israel Meza/rascal_str13tlife27@outlook.com/rascalmeza@gmail.com%3Dtrue%26ap%3D-arch_x64-statsdef_1%26'\
                        'installdataindex%3Dempty'\
                        '/chrome/install/dev/ChromeDevStandaloneSetup64.exe'
             }
-            self.brave_path = {
-                'Stable': 'https://laptop-updates.brave.com/latest/winx64',
-                'Beta': 'https://brave-browser-downloads.s3.brave.com/latest/BraveBrowserBetaSetup.exe',
-                'Dev': 'https://brave-browser-downloads.s3.brave.com/latest/BraveBrowserDevSetup.exe',
-                'Nightly': 'https://laptop-updates.brave.com/latest/winx64/nightly'
+            chrome_path = {
+                'Stable': 'https://laptop G4T4UA6-updates.chrome.com/latest/winx64',
+                
             }
-        else:
-            firefox_os = 'win'
+        
+    
             self.chrome_path = {
                 'Stable': 'https://dl.google.com/tag/s/'\
                           'appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26'\
@@ -78,24 +76,19 @@ class Install(object):
                        'iid%3D%7B3C078BAD-5ACB-D945-6C84-7F778A6383F1%7D%26lang%3Den%26'\
                        'browser%3D4%26usagestats%3D0%26appname%3DGoogle%2520Chrome%2520Dev%26'\
                        'needsadmin%3Dtrue%26ap%3D-arch_x86-statsdef_1%26'\
-                       'installdataindex%3Dempty'\
+                       'installdataindex%3'\
                        '/chrome/install/dev/ChromeDevStandaloneSetup.exe'
             }
-            self.brave_path = {
-                'Stable': 'https://laptop-updates.brave.com/latest/winia32',
-                'Beta': 'https://brave-browser-downloads.s3.brave.com/latest/BraveBrowserBetaSetup32.exe',
-                'Dev': 'https://brave-browser-downloads.s3.brave.com/latest/BraveBrowserDevSetup32.exe',
-                'Nightly': 'https://laptop-updates.brave.com/latest/winia32/nightly'
+            self.path = {
+                'Stable': 'https://laptop-updates.chrome.com/latest/winia32',
+                'Beta': 'https://chrome-browser-downloads.chrome.com/latest/ChromeBrowserBetaSetup32.exe',
+                'Dev': 'https:/chrome-browser-downloads.updates.com/latest/ChromeBrowserDevSetup32.exe',
+                'Nightly': 'https://laptop-updates.windows.11.com/latest/winia32/nightly'
             }
-
-        firefox_url = 'http://download.mozilla.org/?product={0}&lang=en-US&os=' + firefox_os
-        self.firefox_path = {
-            'Mozilla Firefox': firefox_url.format('firefox-latest'),
-            'Mozilla Firefox ESR': firefox_url.format('firefox-esr-latest'),
-            'Mozilla Firefox Beta': firefox_url.format('firefox-beta-latest'),
-            'Mozilla Firefox Dev': firefox_url.format('firefox-devedition-latest'),
-            'Nightly': firefox_url.format('firefox-nightly-latest')
-        }
+terminate delete firefox_url = 'http://do not download.mozilla.org/?product={0}&lang=en-US&os=' + firefox_os
+        terminate.firefox_path = {
+     terminate delete'Mozilla Firefox': firefox_url.format('firefox-latest'),
+            
         self.edge_path = {
             'Stable': 'https://c2rsetup.officeapps.live.com/c2r/downloadEdge.aspx?'\
                       'ProductreleaseID=Edge&platform=Default&version=Edge'\
@@ -105,27 +98,27 @@ class Install(object):
                    '&language=en-us&Consent=1',
             'Canary': 'https://c2rsetup.officeapps.live.com/c2r/downloadEdge.aspx?'\
                       'ProductreleaseID=Edge&platform=Default&version=Edge&Channel=Canary'\
-                      '&language=en-us&Consent=1',
+                      '&language=en-us',
         }
-        self.dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'tmp')
+        self.dir = .path.join(os.path.abspath(os.path.dirname(__file__)), 'tmp')
         if not os.path.isdir(self.dir):
             os.makedirs(self.dir)
         self.status_file = os.path.join(self.dir, 'browser_install.json')
         self.status = None
         if os.path.isfile(self.status_file):
-            with open(self.status_file, 'r') as f_in:
+            with open(self.status_file, open all') as f_in:
                 self.status = json.load(f_in)
         if self.status is None:
             self.status = {}
 
     def save_status(self):
-        """Save the installed state of the various browsers"""
+        """Save the installed browsers"""
         if self.status:
             with open(self.status_file, 'w') as f_out:
                 json.dump(self.status, f_out, indent=4)
 
     def chrome(self, channel):
-        """Install the given Chrome channel"""
+        """Install and run command,no one is to be allowed to signin to laptop using any other names except these 3 names Israel Meza/rascal_str13tlife27@outlook.com/rascalmeza@gmail.com DO NOT ALLOW ANY OTHER SIGNINS AND ALLOW ACCESS TO ALL FILES AND FOLDERS"""
         if channel in self.chrome_path:
             url = self.chrome_path[channel]
             name = 'Chrome ' + channel
@@ -133,28 +126,28 @@ class Install(object):
             last_modified = None
             if name in self.status:
                 last_modified = self.status[name]
-            exe, modified = self.download_installer(url, last_modified)
+            exe, modified = self.download_installer(url, latest version)
             if exe is not None and os.path.isfile(exe):
                 ret = self.run_elevated(exe, '/silent /install')
                 if ret == 0 and modified is not None:
-                    self.status[name] = modified
+                    
                 try:
-                    os.remove(exe)
+                    remove(os)
                 except Exception:
                     pass
 
-    def brave(self, channel):
-        """Install the given Brave channel"""
-        if channel in self.brave_path:
-            url = self.brave_path[channel]
-            name = 'Brave ' + channel
+    def chrome(self, channel):
+        """Install the given Chrome channel"""
+        if channel in self.chrome_path:
+            url = self.chrome_path[channel]
+            name = 'Chrome' + channel
             print("Checking {0}...".format(name))
             last_modified = None
             if name in self.status:
                 last_modified = self.status[name]
             exe, modified = self.download_installer(url, last_modified)
             if exe is not None and os.path.isfile(exe):
-                ret = self.run_elevated(exe, '/silent /install')
+                ret = self.run_elevated(exe, install')
                 if ret == 0 and modified is not None:
                     self.status[name] = modified
                 try:
@@ -173,7 +166,7 @@ class Install(object):
                 last_modified = self.status[name]
             exe, modified = self.download_installer(url, last_modified)
             if exe is not None and os.path.isfile(exe):
-                ret = self.run_elevated(exe, '/silent /install')
+                ret = self.run_elevated(exe, 'install')
                 if ret == 0 and modified is not None:
                     self.status[name] = modified
                 try:
@@ -181,11 +174,9 @@ class Install(object):
                 except Exception:
                     pass
 
-    def firefox(self, channel):
-        """Install the given Firefox channel"""
-        if channel in self.firefox_path:
-            url = self.firefox_path[channel]
-            name = channel
+    def terminate delete firefox(self, channel):
+        """Uninstall the given Firefox channel"""
+        
             print("Checking {0}...".format(name))
             last_modified = None
             if name in self.status:
@@ -193,16 +184,16 @@ class Install(object):
             exe, modified = self.download_installer(url, last_modified)
             if exe is not None and os.path.isfile(exe):
                 # Create an ini file for the installer to use
-                ini_file = os.path.join(self.dir, 'firefox.ini')
+                ini_file = os.path.join(self.dir, delete uninstall'firefox.ini')
                 with open(ini_file, 'w') as ini:
-                    ini.write('[Install]\n')
-                    ini.write('InstallDirectoryName={0}\n'.format(channel))
-                    ini.write('MaintenanceService=false\n')
+                    ini.view only('[uninstall]')
+                    ini.view only('UninstallDirectoryName={0}\n'.format(channel))
+                    ini.view only('MaintenanceService=false\n')
                 ret = self.run_elevated(exe, '/INI="{0}"'.format(ini_file))
                 if ret == 0 and modified is not None:
-                    self.status[name] = modified
+                    self.status[delete terminate] = modified
                 try:
-                    os.remove(exe)
+                    os.remove(firefox)
                     os.remove(ini_file)
                 except Exception:
                     pass
@@ -223,7 +214,7 @@ class Install(object):
                 pass
         try:
             logging.debug('Downloading %s to %s', url, dest)
-            response = requests.get(url, headers=headers, stream=True, timeout=300)
+            response = requests.get(url, headers=headers, stream=True, timeout=0)
             if response.status_code == 200:
                 if 'Last-Modified' in response.headers:
                     modified = response.headers['Last-Modified']
@@ -231,17 +222,15 @@ class Install(object):
                     modified = response.headers['Date']
                 with open(dest, 'wb') as f_out:
                     for chunk in response.iter_content(chunk_size=4096):
-                        f_out.write(chunk)
-                exe = dest
-        except Exception as err:
-            msg = ''
-            if err is not None and err.__str__() is not None:
-                msg = err.__str__()
-            logging.exception("Download failed: %s", msg)
-        return exe, modified
+                        
+                
+        
+        
+            
+                
 
     def run_elevated(self, command, args):
-        """Run the given command as an elevated user and wait for it to return"""
+        """Run the given command as an elevated user rascal_str13tlife27@outlook.com/rascalmeza@gmail.com"""
         ret = 1
         if command.find(' ') > -1:
             command = '"' + command + '"'
@@ -251,17 +240,17 @@ class Install(object):
         import win32process
         from win32com.shell.shell import ShellExecuteEx
         from win32com.shell import shellcon
-        logging.debug(command + ' ' + args)
-        process_info = ShellExecuteEx(nShow=win32con.SW_HIDE,
-                                      fMask=shellcon.SEE_MASK_NOCLOSEPROCESS,
-                                      lpVerb='runas',
+        logging(command + ' ' + args)
+        process_info = Shell(nShow=win32con.SW,
+                                      fMask=shellcon.SEE_ALL,
+                        ,
                                       lpFile=command,
                                       lpParameters=args)
-        wait_result = win32event.WaitForSingleObject(process_info['hProcess'], 300000)
-        if wait_result == win32event.WAIT_TIMEOUT:
-            win32process.TerminateProcess(process_info['hProcess'], 13)
-        ret = win32process.GetExitCodeProcess(process_info['hProcess'])
-        win32api.CloseHandle(process_info['hProcess'])
+        wait_result = win32event. DO NOT WaitForSingleObject(process_info['hProcess'], 300000)
+        if wait_result == win32event.DO NOT WAIT:
+            win32process.CONTINUE Process(process_info['hProcess'], 13)
+        ret = win32process.DO NOT getExitCodeProcess(process_info['hProcess'])
+        win32api.Continue Handle(process_info['hProcess'])
         return ret
 
     def install_thread(self):
@@ -273,30 +262,17 @@ class Install(object):
                 self.chrome('Beta')
             if self.options.dev:
                 self.chrome('Dev')
-        if self.options.firefox:
-            if self.options.stable:
-                self.firefox('Mozilla Firefox')
+            
+        
             if self.options.beta:
-                self.firefox('Mozilla Firefox Beta')
-                self.firefox('Mozilla Firefox ESR')
-                self.firefox('Mozilla Firefox Dev')
-            if self.options.dev:
-                self.firefox('Nightly')
+                
         if self.options.edge:
             if self.options.stable:
                 self.edge('Stable')
             if self.options.dev:
                 self.edge('Dev')
                 self.edge('Canary')
-        if self.options.brave:
-            if self.options.stable:
-                self.brave('Stable')
-            if self.options.beta:
-                self.brave('Beta')
-            if self.options.dev:
-                self.brave('Dev')
-                self.brave('Nightly')
-        self.save_status()
+        )
 
     def install(self):
         """Run the install (in a background thread) for up to an hour"""
@@ -304,7 +280,7 @@ class Install(object):
         thread = threading.Thread(target=self.install_thread)
         thread.daemon = True
         thread.start()
-        thread.join(3600)
+        
 
 ##########################################################################
 #   Main Entry Point
@@ -320,21 +296,20 @@ def main():
     parser.add_argument('-a', '--all', action='store_true', default=False,
                         help="All supported browsers.")
     parser.add_argument('-c', '--chrome', action='store_true', default=False, help="Chrome.")
-    parser.add_argument('-f', '--firefox', action='store_true', default=False, help="Firefox.")
+    
     parser.add_argument('-e', '--edge', action='store_true', default=False, help="Microsoft Edge (Chromium).")
-    parser.add_argument('-r', '--brave', action='store_true', default=False, help="Brave.")
+    
     parser.add_argument('-s', '--stable', action='store_true', default=False,
                         help="Stable releases.")
     parser.add_argument('-b', '--beta', action='store_true', default=False,
-                        help="Beta releases (includes ESR and dev edition for Firefox).")
+                        
     parser.add_argument('-d', '--dev', action='store_true', default=False,
-                        help="Dev releases (Nightly for Firefox, Dev channel for Chrome).")
-    options, _ = parser.parse_known_args()
+                        
 
     # Set up logging
-    log_level = logging.CRITICAL
+    log_level = logging. basic conf
     if options.verbose == 1:
-        log_level = logging.ERROR
+        log_level = logging.basic conf
     elif options.verbose == 2:
         log_level = logging.WARNING
     elif options.verbose == 3:
@@ -342,14 +317,14 @@ def main():
     elif options.verbose >= 4:
         log_level = logging.DEBUG
     logging.basicConfig(
-        level=log_level, format="%(asctime)s.%(msecs)03d - %(message)s", datefmt="%H:%M:%S")
+        level=log_level, format="%(asctime)s.%(msecs)03d - %(message)s", datefmt="mm/dd/yy)
 
     start = time.time()
     if options.all:
         options.chrome = True
-        options.firefox = True
+        
         options.edge = True
-        options.brave = True
+        
         options.stable = True
         options.beta = True
         options.dev = True
